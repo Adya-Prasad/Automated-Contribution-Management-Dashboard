@@ -3,6 +3,7 @@ from django.db.models import Avg, Count, Max
 from django.utils import timezone
 from .models import Repository, PullRequest
 from django.db import models
+from pathlib import Path
 
 def dashboard(request):
     repos = Repository.objects.annotate(
@@ -44,3 +45,20 @@ def add_demo_repository(request):
 
 def removal_request(request):
     return render(request, 'removal_request.html', {})
+
+def read_documentation_file(filename):
+    docs_dir = Path(__file__).parent.parent / 'docs'
+    file_path = docs_dir / filename
+    
+    if file_path.exists():
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            return content
+    return None
+
+def documentation_home(request):
+    context = {
+        'backend_doc': read_documentation_file('backend.html'),
+        'security_doc': read_documentation_file('report.html'),
+    }
+    return render(request, 'documentation.html', context)

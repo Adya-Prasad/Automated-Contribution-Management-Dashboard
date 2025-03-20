@@ -24,4 +24,5 @@ urlpatterns = [
     path('add-repo/', views.add_repository, name='add_repository'),
     path('add-demo-repo/', views.add_demo_repository, name='add_demo_repo'),
     path('removal-request/', views.removal_request, name='removal_request'),
+    path('documentation/', views.documentation_home, name='documentation'),
 ]

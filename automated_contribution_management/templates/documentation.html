@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentation - Automated Contribution Management</title>
+    <link rel="stylesheet" href="../static/docs.css">
+</head>
+<body>
+    <div class="documentation">
+        <div class="doc-nav">
+            <h1>Documentation for Automated Contribution Management Dashboard</h1>
+            <ul>
+                <li><a href="#backend">Backend Documentation</a></li>
+                <li><a href="#security">Security Policy</a></li>
+                <li><a href="/">Dashboard Home</a></li>
+            </ul>
+        </div>
+        
+        <div class="doc-content">
+            <section id="backend">
+                {{ backend_doc|safe }}
+            </section>
+            
+            <section id="security">
+                {{ security_doc|safe }}
+            </section>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend docs</title>
+    <style>
+        body {
+            max-width: 1500px;
+            background-color: rgb(38, 39, 39);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 1rem auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="automated-contribution-management-dashboard-documentation">Automated Contribution Management Dashboard
+        Documentation</h1>
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#system-architecture">System Architecture</a></li>
+        <li><a href="#setup--configuration">Setup &amp; Configuration</a></li>
+        <li><a href="#features--usage">Features &amp; Usage</a></li>
+        <li><a href="#api-documentation">API Documentation</a></li>
+        <li><a href="#contributing">Contributing</a></li>
+    </ul>
+    <h2 id="overview">Overview</h2>
+    <p>The Automated Contribution Management Dashboard is a Django-based system that helps manage and automate GitHub
+        repository contributions. It provides real-time monitoring, PR tracking, and automated workflow management.</p>
+    <h2 id="system-architecture">System Architecture</h2>
+    <h3 id="core-components">Core Components</h3>
+    <pre><code>automated_contribution_management/
+├── models/                 <span class="hljs-meta"># Data models</span>
+│   ├── Repository         <span class="hljs-meta"># Repository configuration</span>
+│   ├── PullRequest        <span class="hljs-meta"># PR tracking</span>
+│   └── GitHubConfig      <span class="hljs-meta"># <span class="hljs-meta-keyword">Global</span> settings</span>
+├── scripts/               <span class="hljs-meta"># Automation scripts</span>
+│   └── pr_manager.py     <span class="hljs-meta"># PR status updates</span>
+└── templates/            <span class="hljs-meta"># Dashboard views</span>
+</code></pre>
+    <h3 id="technology-stack">Technology Stack</h3>
+    <ul>
+        <li><strong>Backend</strong>: Django 5.1.7</li>
+        <li><strong>Database</strong>: SQLite3</li>
+        <li><strong>GitHub Integration</strong>: PyGithub 2.6.1</li>
+        <li><strong>Automation</strong>: Jenkins, GitHub Actions</li>
+        <li><strong>Frontend</strong>: HTML5, CSS3</li>
+    </ul>
+    <h2 id="setup-configuration">Setup &amp; Configuration</h2>
+    <h3 id="1-environment-setup">1. Environment Setup</h3>
+    <pre><code class="lang-bash"><span class="hljs-comment"># Clone repository</span>
+git clone https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/yourusername/</span>automated-contribution-management.git
+
+<span class="hljs-comment"># Create virtual environment</span>
+python -m venv .venv
+.venv\Scripts\activate  <span class="hljs-comment"># Windows</span>
+source .venv<span class="hljs-regexp">/bin/</span>activate  <span class="hljs-comment"># Linux/macOS</span>
+
+<span class="hljs-comment"># Install dependencies</span>
+pip install -r requirements.txt
+</code></pre>
+    <h3 id="2-environment-variables">2. Environment Variables</h3>
+    <p>Create <code>.env.production</code>:</p>
+    <pre><code class="lang-env"><span class="hljs-attr">DJANGO_SECRET_KEY</span>=your_secret_key
+<span class="hljs-attr">GITHUB_TOKEN</span>=your_github_token
+</code></pre>
+    <h3 id="3-database-configuration">3. Database Configuration</h3>
+    <pre><code class="lang-bash">python manage<span class="hljs-selector-class">.py</span> makemigrations
+python manage<span class="hljs-selector-class">.py</span> migrate
+python manage<span class="hljs-selector-class">.py</span> createsuperuser
+</code></pre>
+    <h2 id="features-usage">Features &amp; Usage</h2>
+    <h3 id="1-dashboard-overview">1. Dashboard Overview</h3>
+    <ul>
+        <li><strong>Global Statistics</strong>: View total repositories, open PRs, and average PR age</li>
+        <li><strong>Per-Repository Metrics</strong>: Track open PRs, stale PRs, and response times</li>
+        <li><strong>Recent Activity</strong>: Monitor latest PR updates across all repositories</li>
+    </ul>
+    <h3 id="2-adding-repositories">2. Adding Repositories</h3>
+    <ol>
+        <li>Access Django admin at <code>/admin</code></li>
+        <li>Navigate to Repositories</li>
+        <li>Add repository details:<ul>
+                <li>Owner: GitHub username</li>
+                <li>Name: Repository name</li>
+                <li>Token: (Optional) Repository-specific token</li>
+            </ul>
+        </li>
+    </ol>
+    <h3 id="3-pr-management">3. PR Management</h3>
+    <p>The system automatically:</p>
+    <ul>
+        <li>Updates PR statuses every 30 minutes</li>
+        <li>Flags PRs as stale after 7 days</li>
+        <li>Adds reminder comments on stale PRs</li>
+        <li>Closes inactive PRs after 14 days</li>
+    </ul>
+    <h3 id="4-automation-configuration">4. Automation Configuration</h3>
+    <h4 id="github-actions">GitHub Actions</h4>
+    <pre><code class="lang-yaml"><span class="hljs-attribute">name</span>: PR Management
+<span class="hljs-attribute">on</span>:
+  <span class="hljs-attribute">schedule</span>: 
+    - <span class="hljs-attribute">cron</span>: <span class="hljs-string">'*/30 * * * *'</span>  # Runs every <span class="hljs-number">30</span> minutes
+</code></pre>
+    <h4 id="jenkins-pipeline">Jenkins Pipeline</h4>
+    <pre><code class="lang-groovy">pipeline {
+    agent <span class="hljs-keyword">any</span>
+    triggers {
+        cron(<span class="hljs-string">'H/30 * * * *'</span>)
+    }
+    <span class="hljs-comment">// ... rest of pipeline configuration</span>
+}
+</code></pre>
+    <h2 id="api-documentation">API Documentation</h2>
+    <h3 id="models">Models</h3>
+    <h4 id="repository-model">Repository Model</h4>
+    <pre><code class="lang-python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Repository</span>(<span class="hljs-title">models</span>.<span class="hljs-type">Model</span>):
+    owner = models.<span class="hljs-type">CharField</span>(<span class="hljs-title">max_length</span>=100)
+    name = models.<span class="hljs-type">CharField</span>(<span class="hljs-title">max_length</span>=100)
+    token = models.<span class="hljs-type">CharField</span>(<span class="hljs-title">max_length</span>=100, <span class="hljs-title">blank</span>=<span class="hljs-type">True</span>)</span>
+</code></pre>
+    <h4 id="pullrequest-model">PullRequest Model</h4>
+    <pre><code class="lang-python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">PullRequest</span>(<span class="hljs-title">models</span>.<span class="hljs-type">Model</span>):
+    repo = models.<span class="hljs-type">ForeignKey</span>(<span class="hljs-type">Repository</span>)
+    pr_number = models.<span class="hljs-type">IntegerField</span>()
+    title = models.<span class="hljs-type">CharField</span>(<span class="hljs-title">max_length</span>=200)
+    status = models.<span class="hljs-type">CharField</span>(<span class="hljs-title">max_length</span>=20)
+    age = models.<span class="hljs-type">IntegerField</span>(<span class="hljs-title">default</span>=0)</span>
+</code></pre>
+    <h3 id="key-endpoints">Key Endpoints</h3>
+    <ul>
+        <li><code>/</code>: Dashboard home</li>
+        <li><code>/add-repo/</code>: Add repository</li>
+        <li><code>/add-demo-repo/</code>: Add demo repository</li>
+        <li><code>/removal-request/</code>: Request repository removal</li>
+    </ul>
+    <h2 id="contributing">Contributing</h2>
+    <h3 id="development-setup">Development Setup</h3>
+    <ol>
+        <li>Fork repository</li>
+        <li>Create feature branch</li>
+        <li>Install development dependencies</li>
+        <li>Make changes</li>
+        <li>Run tests</li>
+        <li>Submit PR</li>
+    </ol>
+    <h3 id="code-style">Code Style</h3>
+    <ul>
+        <li>Follow PEP 8</li>
+        <li>Use descriptive variable names</li>
+        <li>Add docstrings for functions</li>
+        <li>Include type hints</li>
+    </ul>
+    <h3 id="testing">Testing</h3>
+    <pre><code class="lang-bash"><span class="hljs-meta"># Run tests</span>
+python manage.py test
+
+<span class="hljs-meta"># Check code style</span>
+flake8 .
+</code></pre>
+    <h3 id="security-notes">Security Notes</h3>
+    <ul>
+        <li>Never commit tokens or secrets</li>
+        <li>Use environment variables</li>
+        <li>Implement rate limiting</li>
+        <li>Validate GitHub webhooks</li>
+    </ul>
+    <i>docs are under creation... detailed doc coming soon</i>
+</body>
+
+</html>
