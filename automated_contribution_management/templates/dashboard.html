@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Automated Workflow Dashboard</title>
+    <link rel="stylesheet" href="../static/dashboard.css">
+</head>
+<body>
+    <div class="header">
+        <h1>CONTRIBUTION WORKFLOW MANAGEMENT AND AUTOMATION DASHBOARD</h1>
+    </div>
+    <div class="menu">
+        <div class="menu-item">
+            <a href="/add-repo">
+                <b>Add a Repository</b>
+                <p>Get real-time status, processing log and workflow of your repository automatically.</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="/add-demo-repo">
+                <b>Add Demo Repository</b>
+                <p>Don't have any GitHub repository? You can add a sample repo, but process can be lengthy.</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="https://github.com/Adya-Prasad/Automated-Contribution-Management-Dashboard">
+                <b>Read Documentation & Backend Logic</b>
+                <p>Get more dipper insight of this dashboard configurations and logic.</p>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="/removal-request">
+                <b>Request to Remove any Repo</b>
+                <p>You can make request to remove a repository for any valid reason.</p>
+            </a>
+        </div>
+    </div>
+    <div class="main">
+        <h2>Connected Repository Contribution Workflow and Status</h2>
+        <!-- Global Stats -->
+        <div class="global-stats">
+            <h3>Global Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Repositories</h4>
+                    <p>{{ repos|length }}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Open PRs</h4>
+                    <p>{{ global_stats.total_prs }}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Average PR Age</h4>
+                    <p>{{ global_stats.avg_age|floatformat:1 }} days</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Average PR Age</h4>
+                    <p>{{ global_stats.avg_age|floatformat:1 }} days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats of each connected sepositories -->
+        <h3>Connected Repositories</h3>
+        <div class="repo-section">
+        {% for repo in repos %}
+            <h4>{{ repo.owner }}/{{ repo.name }}</h4>
+            <div class="repo-list">
+                <div class="repo-stats">
+                    <label>Open PRs</label>
+                    <p>{{ repo.stats.open_prs }}</p>
+                </div>
+                <div class="repo-stats">
+                    <label>Stale PRs (>7d)</label>
+                    <p>{{ repo.stats.stale_prs }}</p>
+                </div>
+                <div class="repo-stats">
+                    <label>Avg. Response Time</label>
+                    <p>{{ repo.stats.avg_response|floatformat:1 }}h</p>
+                </div>
+                <div class="repo-view">
+                    <label>See Workflow and Status</label>
+                    <p>Indetail view</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+        <!-- Recent Activity Section -->
+        <div class="table-container">
+            <h3>Recent Activity Across All Repositories</h3>
+            <table>
+                <thead>
+                    <th>Repo</th>
+                    <th>PR #</th>
+                    <th>Title</th>
+                    <th>Age</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                </thead>
+                {% for pr in recent_activity %}
+                <tr>
+                    <td>{{ pr.repo.owner }}/{{ pr.repo.name }}</td>
+                    <td>#{{ pr.pr_number }}</td>
+                    <td>{{ pr.title }}</td>
+                    <td>{{ pr.age }} days</td>
+                    <td>{{ pr.status }}</td>
+                    <td>{{ pr.updated_at|timesince }} ago</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="para">A Project developed by Adya Prasad for Django GSoC 2025</div>
+    <footer>
+        <p>all right reserved &copy; 2025, adya prasad आद्या प्रसाद 😎</p>
+    </footer>
+</body>
+</html>
