@@ -1,9 +1,10 @@
 name: PR Management
 
 on:
-    schedule: 
-        - cron: '*/30 * * * *' # cron every 20 minutes
-    workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # Run at midnight on Sunday every week
+  workflow_dispatch:
+
 
 jobs:
     manage-prs:
